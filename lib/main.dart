@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -15,6 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
+        fontFamily: 'DS-Digital',
       ),
       home: const MyHomePage(),
     );
@@ -77,12 +77,15 @@ class MyHomePageState extends State<MyHomePage>{
       case '-':
       case '*':
       case '/':
-      setState(() {
-        storage = performOp(quedOp);
-        // value = 0;
+      if(isOpQued){
         quedOp = op;
-        isOpQued = true;
-      });
+      }else{
+        setState(() {
+          storage = performOp(quedOp);
+          // value = 0;
+          quedOp = op;
+          isOpQued = true;
+        });}
 
       case '=':
       setState(() {
@@ -121,39 +124,85 @@ class MyHomePageState extends State<MyHomePage>{
       return Scaffold(
         body: Column(
           children: [
-            Text(value.toString()),
-            Row(children: [
-                Expanded(child: MyElevatedButton(child: const Text('CE'), onPressed: ()=> operation('ce'),)),
-                MyElevatedButton(child: const Text('Del'), onPressed: ()=> operation('del'),),
-                MyElevatedButton(child: const Text('+'), onPressed: ()=> operation('+'),),
-            ],),
-            Row(children:[
-              MyElevatedButton(child: const Text('7'), onPressed : ()=> operation('7')), 
-              MyElevatedButton(child: const Text('8'), onPressed : ()=> operation('8')),
-              MyElevatedButton(child: const Text('9'), onPressed : ()=> operation('9')),
-              MyElevatedButton(child: const Text('-'), onPressed : ()=> operation('-')),
-            ]),
-            Row(children:[
-              MyElevatedButton(child: const Text('4'), onPressed : ()=> operation('4')), 
-              MyElevatedButton(child: const Text('5'), onPressed : ()=> operation('5')),
-              MyElevatedButton(child: const Text('6'), onPressed : ()=> operation('6')),
-              MyElevatedButton(child: const Text('*'), onPressed : ()=> operation('*')),
-            ]),
-            Row(children:[
-              MyElevatedButton(child: const Text('1'), onPressed : ()=> operation('1')), 
-              MyElevatedButton(child: const Text('2'), onPressed : ()=> operation('2')),
-              MyElevatedButton(child: const Text('3'), onPressed : ()=> operation('3')),
-              MyElevatedButton(child: const Text('/'), onPressed : ()=> operation('/')),
-            ]),
-            Row(children:[
-              Expanded(child: MyElevatedButton(child: const Text('0'), onPressed : ()=> operation('0'))), 
-              MyElevatedButton(child: const Text('='), onPressed : ()=> operation('=')),
-            ]),
+            Expanded(
+              child: Container(
+                color: Color.fromRGBO(140, 150, 140, 1),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                child: Text(
+                  value.toString(), 
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    backgroundColor: Color.fromRGBO(140, 150, 140, 1),
+                  ),),
+                            ),
+              ),),
+
+            Expanded(
+              child: Row(children: [
+                  Expanded(child: MyElevatedButton(child: const MyText('CE'), onPressed: ()=> operation('ce'),)),
+                  Expanded(child: MyElevatedButton(child: const MyText('Del'), onPressed: ()=> operation('del'),)),
+                  MyElevatedButton(child: const MyText('+'), onPressed: ()=> operation('+'),),
+              ],),
+            ),
+
+            Expanded(
+              child: Row(children:[
+                MyElevatedButton(child: const MyText('7'), onPressed : ()=> operation('7')), 
+                MyElevatedButton(child: const MyText('8'), onPressed : ()=> operation('8')),
+                MyElevatedButton(child: const MyText('9'), onPressed : ()=> operation('9')),
+                MyElevatedButton(child: const MyText('-'), onPressed : ()=> operation('-')),
+              ]),
+            ),
+
+            Expanded(
+              child: Row(children:[
+                MyElevatedButton(child: const MyText('4'), onPressed : ()=> operation('4')), 
+                MyElevatedButton(child: const MyText('5'), onPressed : ()=> operation('5')),
+                MyElevatedButton(child: const MyText('6'), onPressed : ()=> operation('6')),
+                MyElevatedButton(child: const MyText('*'), onPressed : ()=> operation('*')),
+              ]),
+            ),
+
+            Expanded(
+              child: Row(children:[
+                MyElevatedButton(child: const MyText('1'), onPressed : ()=> operation('1')), 
+                MyElevatedButton(child: const MyText('2'), onPressed : ()=> operation('2')),
+                MyElevatedButton(child: const MyText('3'), onPressed : ()=> operation('3')),
+                MyElevatedButton(child: const MyText('/'), onPressed : ()=> operation('/')),
+              ]),
+            ),
+
+            Expanded(
+              child: Row(children:[
+                Expanded(child: MyElevatedButton(child: const MyText('0'), onPressed : ()=> operation('0'))), 
+                MyElevatedButton(child: const MyText('='), onPressed : ()=> operation('=')),
+              ]),
+            ),
           ],),
       );
   }
 }
 
+
+class MyText extends StatelessWidget{
+
+  const MyText(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context){
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+}
 
 
 class MyElevatedButton extends StatelessWidget{
@@ -162,17 +211,29 @@ class MyElevatedButton extends StatelessWidget{
   final VoidCallback onPressed ;
 
   final myStyle = const ButtonStyle(
-    foregroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 38, 37, 23)),
-    backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(186, 96, 93, 141)),
+    foregroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 224, 223, 217)),
+    backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(185, 19, 19, 19)),
     shape: WidgetStatePropertyAll(ContinuousRectangleBorder(
-      side: BorderSide(color: Colors.black, width: 1.0)
+      side: BorderSide(color: Color.fromARGB(255, 189, 181, 178), width: 10.0)
     ))
   );
 
   @override
   Widget build(BuildContext context){
-
-    return ElevatedButton(style: myStyle, onPressed: onPressed, child: child, );
+    Size size = MediaQuery.of(context).size;
+    double buttonWidth = size.width / 4;
+    double buttonHeight = size.height / 6;
+    
+    return SizedBox(
+      width: buttonWidth,
+      height: buttonHeight,
+      child: ElevatedButton(
+      style: myStyle,
+      onPressed: onPressed,
+      child: child,
+      ),
+    );
 
   }
 }
+
